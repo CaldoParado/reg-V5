@@ -32,5 +32,12 @@
 		"vite": "^4.4.2",
 		"vitest": "^0.32.2"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@popperjs/core": "^2.11.8",
+		"cupertino-pane": "^1.4.2",
+		"firebase": "^10.7.1",
+		"pocketbase": "^0.20.1",
+		"swiper": "^10.3.0"
+	}
 }
