@@ -1,5 +1,6 @@
 import type { IProvider } from '$lib/models/provider.model';
 import { PocketBaseProvider } from './providers/Pb.service';
+import { ElectronProvider } from './providers/electron.service';
 import { FirebaseService } from './providers/firebase.service';
 
 export class DBService {
@@ -17,8 +18,10 @@ export class DBService {
 		// if (window.ELECTRON_API) {
 		console.log(import.meta.env.DEV);
 		console.log(import.meta.env.DEV);
-		
-		if (import.meta.env.DEV) {
+
+		if (window.ELECTRON_API) {
+			DBService.provider = new ElectronProvider();
+		} else if (import.meta.env.DEV) {
 			// Revisa el API de electron (se conecta a Pocketbase)
 			DBService.provider = new PocketBaseProvider(); //Esto es a modo de prueba
 		} else if (navigator.onLine) {

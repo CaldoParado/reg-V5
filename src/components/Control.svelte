@@ -22,7 +22,25 @@
 </script>
 
 <div class="container">
-	<button class="pay-button" on:click={()=> addProduct({description: '', icon: '', id: '', name: '', price: 1, quantity: 1, shortName: ''})}> PAGAR LOGO </button>
+	<button
+		class="pay-button"
+		on:click={() =>
+			addProduct({
+				description: '',
+				icon: '',
+				id: '',
+				name: '',
+				price: 1,
+				quantity: 1,
+				shortName: ''
+			})}
+	>
+		PAGAR
+		<img src="images/cocinerito.svg" alt="" height="75" width="75">
+		<!-- <svg width="16" height="16">
+			<use xlink:href="assetsiconos.svg#icono1"></use>
+		  </svg> -->
+	</button>
 	<div class="tabs">
 		{#each options as option}
 			<button on:click={() => (current = option.component)} class="tab">{option.name}</button>
@@ -40,10 +58,10 @@
 		gap: 1%;
 		/* padding: 2.5%; */
 	}
-    .tabs:first-child{
-        border-top-left-radius: var(--boder-radius, 8px);
-        background-color: #5ed060;
-    }
+	.tabs:first-child {
+		border-top-left-radius: var(--boder-radius, 8px);
+		background-color: #5ed060;
+	}
 	.tab {
 		flex: 1;
 		aspect-ratio: 1.5;
@@ -73,6 +91,10 @@
 	}
 	.pay-button {
 		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
 		aspect-ratio: 7/2;
 		/* height: 100%; */
 		border-radius: var(--boder-radius, 8px);

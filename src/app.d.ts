@@ -3,6 +3,13 @@
 
 export interface IElectronAPI {
 	// loadPreferences: () => Promise<void>,
+
+	//DB API methods
+	getDoc: (id: string, collection: string) => Promise<T>;
+	getDocs: (collection: string) => Promise<T[]>;
+	getDoc: (id: string, collection: string) => Promise<T>;
+
+	//Printing API methods
 	printWebContent: () => Promise<string>;
 	printHtmlContent: (html: string) => void;
 	printText: (text, style) => Promise<void>;
