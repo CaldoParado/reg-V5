@@ -1,15 +1,15 @@
+import { ProductService } from '$lib/services/Products.service';
 import type { PageLoad } from './$types';
 export const prerender = true;
 export const ssr = false;
 
 export const load = (async () => {
-    console.log('main page load')
-    // window.addEventListener()
-    return {
-        name: name(),
-    };
-}) satisfies PageLoad;
+	const psrv = new ProductService();
 
-function name() {
-    return 'this is a name';
-}
+	const ret = {
+		products: psrv.get(),
+		complements: psrv.getComplements(),
+	}
+	console.log(ret);
+	return ret;
+}) satisfies PageLoad;

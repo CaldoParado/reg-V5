@@ -1,12 +1,26 @@
 <script lang="ts">
+	import { ProductService } from '$lib/services/Products.service';
+	import { type Product } from '$lib/models/bill.model';
+	import { addProduct } from '$lib/services/Bill.service';
+
+	export let products: Promise<Product[]>;
+
+	function filterFavs(prods: Product[]) {
+		return prods.filter((p) => p.favorite);
+	}
 </script>
 
 <div class="container">
-	{#each Array(30).keys() as elem}
-		<button class="product-button elem">
-			{`${elem} A/PA chorizo`}
-		</button>
-	{/each}
+	<!-- {#each Array(5).keys() as elem} -->
+	{#await products}
+		<h1>hummm</h1>
+	{:then prods}
+		{#each filterFavs(prods) as elem}
+			<button class="product-button elem" on:click={() => addProduct(elem)}>
+				{`${elem.name}`}
+			</button>
+		{/each}
+	{/await}
 </div>
 
 <style>

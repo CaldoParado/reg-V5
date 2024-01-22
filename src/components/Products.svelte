@@ -1,18 +1,16 @@
-<script>
+<script lang="ts">
 	import { addProduct } from '$lib/services/Bill.service';
-	import { ProductService } from '$lib/services/Products.service';
+	import { type Product } from '$lib/models/bill.model';
 
-	const prod_srvc = new ProductService();
-	// let prods = getProducts();
+	export let products: Promise<Product[]>;
 </script>
 
 <div class="prods-container">
 	<div class="products">
-		{#await prod_srvc.get()}
-			<h1>loading...</h1>
-		{:then prods}
+		{#await products then prods}
 			{#each prods as elem, i}
-				<button class="element product-button" on:click={() => addProduct(elem)}>{elem.name}</button>
+				<button class="element product-button" on:click={() => addProduct(elem)}>{elem.name}</button
+				>
 			{/each}
 		{/await}
 	</div>

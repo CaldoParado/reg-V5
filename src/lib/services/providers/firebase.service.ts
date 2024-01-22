@@ -77,4 +77,20 @@ export class FirebaseService implements IProvider {
 	getDocsFilter<T>(params: { [ke: string]: string }): Promise<T[]> {
 		throw new Error('Method not implemented.', params);
 	}
+
+	createDoc<T>(data: T, collection: string): Promise<T> {
+		console.log(data, collection)
+		throw Error('not implemented yet')
+	}
+
+	updateDoc<T>(id: string, data: T, collection: string): Promise<T> {
+		console.log(id, collection)
+		throw Error('not implemented yet')
+		
+	}
+
+	deleteDoc(id: string, collection: string): Promise<void> {
+		console.log(id, collection)
+		throw Error('not implemented yet')
+	}
 }

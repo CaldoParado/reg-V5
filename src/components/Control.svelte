@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import Modifiers from './controls/Modifiers.svelte';
 	import Actions from './controls/Actions.svelte';
 	import Auth from './controls/Auth.svelte';
-	import { addProduct } from '$lib/services/Bill.service';
+	import { payBill, resetBill } from '$lib/services/Bill.service';
+	import { DBService } from '$lib/services/DB.service';
 
 	const options = [
 		{
@@ -18,25 +19,20 @@
 			component: Auth
 		}
 	];
+
 	let current = options[0].component;
 </script>
 
 <div class="container">
 	<button
 		class="pay-button"
-		on:click={() =>
-			addProduct({
-				description: '',
-				icon: '',
-				id: '',
-				name: '',
-				price: 1,
-				quantity: 1,
-				shortName: ''
-			})}
+		on:click={() => {
+			payBill();
+			resetBill();
+		}}
 	>
 		PAGAR
-		<img src="images/cocinerito.svg" alt="" height="75" width="75">
+		<img src="images/cocinerito.svg" alt="" height="75" width="75" />
 		<!-- <svg width="16" height="16">
 			<use xlink:href="assetsiconos.svg#icono1"></use>
 		  </svg> -->

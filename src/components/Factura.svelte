@@ -1,5 +1,5 @@
 <script lang="ts">
-	import _bill from "$lib/services/Bill.service";
+	import _bill from '$lib/services/Bill.service';
 	// const prods = $_bill;
 </script>
 
@@ -8,7 +8,7 @@
 	<div class="prods">
 		{#each $_bill as prod (prod)}
 			<button id={`${prod}`} class="prod">
-				{`${prod} - 123`}
+				{`${prod.name} - ${prod.quantity * prod.value} #${prod.quantity}`}
 			</button>
 		{/each}
 	</div>

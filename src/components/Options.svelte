@@ -1,6 +1,10 @@
 <script lang="ts">
+	import type { Product } from '$lib/models/bill.model';
+	import { addComplements } from '$lib/services/Bill.service';
+
 	import { fly } from 'svelte/transition';
 
+	export let complements: Promise<Product[]>;
 	let collapsed: boolean = true;
 </script>
 
@@ -11,7 +15,15 @@
 	<!-- <button on:click={()=> collapsed= !collapsed} class="elem product-button"> elem </button> -->
 </div>
 {#if !collapsed}
-	<div class="content-options" in:fly={{ x: 0, y: 1000, duration: 125 }}>content-options</div>
+	<div class="content-options" in:fly={{ x: 0, y: 1000, duration: 125 }}>
+		{#await complements then comps}
+			{#each comps as c}
+				<button on:click={() => addComplements(c)}>
+					{c.name}
+				</button>
+			{/each}
+		{/await}
+	</div>
 {/if}
 
 <style>

@@ -11,8 +11,9 @@
 	import Modal from '../components/modals/Modal.svelte';
 	import { onMount } from 'svelte';
 
-	// export let data;
+	export let data;
 	onMount(() => {
+		// console.log('preloaded data is:', data);
 		// const setText = (e: KeyboardEvent) => {
 		// 	console.log('at window', e.key);
 		// };
@@ -28,11 +29,11 @@
 </div>
 <main>
 	<div class="left-pane" style="--depth: 2;">
-		<Products />
+		<Products products={data.products} />
 	</div>
 	<div class="favorite-pane" style="--depth: 1;">
-		<Favorites />
-		<Options />
+		<Favorites products={data.products}/>
+		<Options complements={data.complements}/>
 	</div>
 	<div class="control-pane" style="--depth: 2;">
 		<Factura />
@@ -43,10 +44,20 @@
 
 <style>
 	#ticket {
+		opacity: 0.2;
 		position: fixed;
 		top: 0;
 		left: 0;
 		pointer-events: none;
+
+		border: 1px solid black;
+		max-width: 80mm;
+		min-width: 80mm;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: stretch;
 		/* z-index: -1; */
 	}
 
