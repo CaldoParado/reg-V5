@@ -7,7 +7,7 @@ export default pb;
 
 export class PocketBaseProvider implements IProvider {
 	createDoc<T>(data: T, collection: string): Promise<T> {
-		throw new Error('Method not implemented.');
+		return pb.collection(collection).create<T>(data as {[key: string]: unknown});
 	}
 	updateDoc<T>(id: string, data: T, collection: string): Promise<T> {
 		throw new Error('Method not implemented.');

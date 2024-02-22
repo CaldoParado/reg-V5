@@ -1,6 +1,9 @@
-import { compareProduct, type Complement, type Product } from '$lib/models/bill.model';
-import { writable, type Writable } from 'svelte/store';
+import { Product, type Complement, type ProductComplement, Category } from '$lib/models/bill.model';
+import { get, writable, type Writable } from 'svelte/store';
 import { DBService } from './DB.service';
+import { Snowflake } from "@theinternetfolks/snowflake";
+
+
 // import { DBService } from './DB.service';
 
 /**
@@ -8,38 +11,53 @@ import { DBService } from './DB.service';
  * @type {Writable<product[]>}
  */
 export const _bill: Writable<Product[]> = writable([]);
+export const product_complements: Writable<ProductComplement[]> = writable([]);
 
-export function payBill(){
-	DBService.getInstance().createDoc({value: Math.round(Math.random()*1000)}, 'bill')
+// _bill.subscribe((b) => console.log('the new bill is', b));
+
+function flatBill(bill: Product[]) {
+	return bill.map((p: Product) => { return { id: p.id, qty: p.quantity, comps: p.complements.map(c => { return { id: c.id } }) } })
 }
 
-export function addComplements(comp: Complement): void {
-	return addProduct({
-		shortName: '',
-		favorite: false,
-		icon: '',
-		description: '',
-		associations: {},
-		quantity: 1,
-		complements: [],
-		...comp,
-	});
-	// _bill.update((products: Product[]) => {
-	// 	const index = products.findIndex((p) => compareProduct(p, comp));
-	// 	return [];
-	// });
+export function payBill() {
+	const uid = Snowflake.generate();
+	const bill = get(_bill);
+	console.log('bill at payBill', JSON.stringify(flatBill(bill)), uid);
+	DBService.getInstance()
+		.createDoc({
+			value: get(_bill).reduce((ac, cu) => ac + cu.fullPrice(), 0),
+			prods: JSON.stringify(flatBill(bill)),
+			uuid: uid,
+		}, 'bill');
+}
+
+export function addComplements(comp: Complement) {
+	const bll = [...(get(_bill) || [])];
+	if (bll.length > 0) {
+		const prod = bll[bll.length - 1];
+		if (prod.category === Category.bandeja) {
+			const newProd = prod.copy();
+			newProd.setComplement(comp);
+			bll[bll.length - 1] = newProd;
+			_bill.set(bll);
+			return;
+		}
+	}
+	addProduct(new Product({ ...comp, category: Category.complemento }));
 }
 
 export function addProduct(product: Product) {
-	_bill.update((products: Product[]) => {
-		const index = products.findIndex((p) => compareProduct(p, product));
-		if (index > -1) {
-			const mod = { ...products[index], quantity: products[index].quantity + 1 };
-			products.splice(index, 1, mod);
-			return products;
-		}
-		return [...products, { ...product, quantity: 1 }];
-	});
+	console.log('adding', product)
+	let bll = get(_bill);
+	const indx = bll.findIndex((p) => p.compareProduct(product));
+	if (indx > -1) {
+		// const mod = new Product() { ...products[index], quantity: products[index].quantity + 1 };
+		const newq = bll[indx].copy();
+		newq.incrementQuantity();
+		bll[indx] = newq;
+	} else
+		bll = [...bll, new Product(product)]
+	_bill.set(bll)
 }
 
 export function removeProduct(product: Product) {

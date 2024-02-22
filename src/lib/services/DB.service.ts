@@ -16,9 +16,6 @@ export class DBService {
 
 	private constructor() {
 		// if (window.ELECTRON_API) {
-		console.log(import.meta.env.DEV);
-		console.log(import.meta.env.DEV);
-
 		if (window.ELECTRON_API) {
 			DBService.provider = new ElectronProvider();
 		} else if (import.meta.env.DEV) { 

@@ -1,14 +1,34 @@
 <script lang="ts">
+	import { Product } from '$lib/models/bill.model';
+	
+	// import { fullPrice } from '$lib/models/bill.model';
 	import _bill from '$lib/services/Bill.service';
+
+	// $: doubled = Object.values($_bill.reduce((ac, prod) => {
+	// 	if (ac[prod.id] && ac[prod.id].compareProduct(prod)) {
+	// 		ac[prod.id].quantity += prod.quantity;
+	// 	} else {
+	// 		ac[prod.id] = new Product({ ...prod });
+	// 	}
+	// 	return ac;
+	// }, {} as { [key: string]: Product }));
+
+	// $: console.log(doubled);
 	// const prods = $_bill;
+
+	
+
 </script>
 
 <div class="container">
 	<div class="header">Controles superiores</div>
 	<div class="prods">
+
 		{#each $_bill as prod (prod)}
 			<button id={`${prod}`} class="prod">
-				{`${prod.name} - ${prod.quantity * prod.value} #${prod.quantity}`}
+				<!-- {`${prod.name} - ${prod.fullPrice()} #${prod.quantity}`} -->
+				<!-- {JSON.stringify(prod.compl)} -->
+				{prod.name} - {prod.complements.map((c) => c.name + c.value)} - {prod.quantity}
 			</button>
 		{/each}
 	</div>
@@ -16,7 +36,7 @@
 		<button class="bill-control" />
 		<button class="bill-control" />
 		<button class="bill-control" />
-		<button class="bill-control" />
+		<button class="bill-control" on:click={() => _bill.set([])} />
 	</div>
 </div>
 

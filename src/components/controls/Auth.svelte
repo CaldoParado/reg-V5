@@ -8,5 +8,5 @@
 <hr />
 <button> manage-prods </button>
 <button class="action" on:click={() => showModal(ProductManagement, {retain: false})} style="--span: 2;">
-    manage prods
+    Product management
 </button>

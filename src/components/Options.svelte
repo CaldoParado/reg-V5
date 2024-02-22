@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Product } from '$lib/models/bill.model';
+	import type { Product, ProductComplement } from '$lib/models/bill.model';
 	import { addComplements } from '$lib/services/Bill.service';
 
 	import { fly } from 'svelte/transition';

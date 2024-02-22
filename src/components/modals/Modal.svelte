@@ -10,7 +10,11 @@
 
 	$: {
 		component = $modalStore.component;
-		props = $modalStore.props;
+		props = $modalStore.props.data!;
+	}
+
+	$: {
+		console.log($modalStore.props.data)
 	}
 
 	let modal: HTMLElement;
@@ -20,7 +24,7 @@
 	 * @param {MouseEvent} e - El evento del click
 	 */
 	function handleClose(e: MouseEvent) {
-		if (props.retain) return;
+		if (!!props?.retain) return;
 		e.target === modal && hideModal();
 	}
 </script>

@@ -1,13 +1,22 @@
-<script>
+<script lang="ts">
+	import { getEmployees } from '$lib/services/Employee.service';
+	import { hideModal } from '$lib/services/Modal.service';
+	import { Employee } from '$lib/models/employee.model';
 
-	import { getEmployees } from "$lib/services/Employee.service";
-	import { hideModal } from "$lib/services/Modal.service";
+	export let filterRole:string = '';
+	$:{
+		console.log('filterRole:', filterRole)
+	}
 
+	function filteredEmployees(): Employee[]{
+		return getEmployees().filter(e => !filterRole || e.roles.includes(filterRole));
+	}
 </script>
+
 <div class="base-modal modal-employees">
 	<h3 class="modal-employees-title">Selecciona un empleado</h3>
 	<div class="modal-employees-content">
-		{#each getEmployees() as employee}
+		{#each filteredEmployees() as employee}
 			<button class="employee-card" on:click={hideModal}> Emp {employee.name}</button>
 		{/each}
 	</div>

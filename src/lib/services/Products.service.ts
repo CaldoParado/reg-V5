@@ -1,10 +1,11 @@
-import type { Product } from '$lib/models/bill.model';
+import type { Product, ProductComplement } from '$lib/models/bill.model';
 import type { IDBService } from '$lib/models/provider.model';
 import { DBService } from './DB.service';
 
 export class ProductService implements IDBService<Product> {
 	DB_COLLECTION = 'product';
 	DB_COLLECTION_COMPLEMENTS = 'complement';
+	DB_COLLECTION_PRODUCT_COMPLEMENTS = 'product_complement_value';
 
 	getById() {
 		return DBService.getInstance().getDoc<Product>('', this.DB_COLLECTION);
@@ -12,6 +13,10 @@ export class ProductService implements IDBService<Product> {
 
 	getComplements(){
 		return DBService.getInstance().getDocs<Product>(this.DB_COLLECTION_COMPLEMENTS);
+	}
+
+	getProductComplements(){
+		return DBService.getInstance().getDocs<ProductComplement>(this.DB_COLLECTION_PRODUCT_COMPLEMENTS);
 	}
 
 	get(): Promise<Product[]> {

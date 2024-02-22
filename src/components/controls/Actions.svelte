@@ -2,15 +2,28 @@
 	import { showModal } from '$lib/services/Modal.service';
 	import Domicilios from '../modals/Domicilios.modal.svelte';
 	import Employee from '../modals/Employee.modal.svelte';
+	import { getEmployees } from '$lib/services/Employee.service';
 </script>
 
 <div class="actions">
 	<button class="action"> Responsable </button>
-	<button class="action" on:click={() => showModal(Employee, {retain: false})} style="--span: 2;">
-		Metodo pago
+	<button
+		class="action"
+		on:click={() =>
+			showModal(Employee, {
+				retain: true,
+				data: {
+					filterRole: 'cashier'
+				}
+			})}
+		style="--span: 2;"
+	>
+		Cajeros
 	</button>
 	<button class="action" style="--span: 2;"> Domicilio </button>
-	<button class="action" on:click={() => showModal(Domicilios, {retain: true})}> Abrir caja </button>
+	<button class="action" on:click={() => showModal(Domicilios, { retain: true })}>
+		Abrir caja
+	</button>
 	<!-- <button class="action" style="--span: 3;"/> -->
 
 	<button class="action" />

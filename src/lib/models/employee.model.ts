@@ -1,18 +1,22 @@
-export type Employee = {
+export class Employee {
 	id: number;
 	name: string;
-	amount: number;
-	due: Date;
-	paid: boolean;
+	roles: string[];
+	status: boolean;
+
+	constructor(emp: Partial<Employee>) {
+		this.id = emp.id!;
+		this.name = emp.name!;
+		this.roles = emp.roles!;
+		this.status = true;
+	}
 }
 
 type deliveryDetails = {
-    zone: number;
-    vehicle: number;
+	zone: number;
+	vehicle: number;
 }
 
 export type Deliveryman = Employee & deliveryDetails;
 
-const d: Deliveryman | null = null;
-
-console.log(d!.zone);
+// const d: Deliveryman | null = null;

@@ -18,4 +18,5 @@ export type ModalState = {
 
 export interface ModalProps {
     retain?: boolean;
+    data?: {[key: string]: unknown};
 }
