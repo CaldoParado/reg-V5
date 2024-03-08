@@ -14,6 +14,9 @@ import {
 
 import { getAnalytics, type Analytics } from 'firebase/analytics';
 import type { IProvider } from '$lib/models/provider.model';
+import { getAuth, type Auth, signInWithEmailAndPassword, type UserCredential, signOut, type User } from 'firebase/auth';
+import firebase from 'firebase/compat/app';
+// import { goto } from '$app/navigation';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,18 +40,49 @@ const firebaseConfig = {
 export class FirebaseService implements IProvider {
 
 	db!: Firestore;
+	auth!: Auth;
 	constructor() {
 		// Initialize Firebase
 		const app: FirebaseApp = initializeApp(firebaseConfig);
-		const db = getFirestore(app);
+		this.db = getFirestore(app);
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const analytics: Analytics = getAnalytics(app);
+		this.auth = getAuth();
 
 		// Conectar al emulador de Firestore si es desarrollo
 		console.log('DEV', import.meta.env.DEV);
 		if (import.meta.env.DEV) {
-			connectFirestoreEmulator(db, 'localhost', 9089);
+			connectFirestoreEmulator(this.db, 'localhost', 9089);
 		}
+	}
+
+	logOut(): void {
+		signOut(this.auth).then(() => {
+			alert('firebase succesfully logout');
+		}).catch(err => console.log(err))
+	}
+
+	authByMail(email: string, password: string): Promise<UserCredential> {
+		firebase.auth().onAuthStateChanged(user => {
+			const currentPath = window.location.pathname;
+			if (user) {
+				console.log('User has been changed', user);
+				if (currentPath.startsWith('/admin/login')) {
+					window.location.pathname = '/admin/user-management';
+				}
+			} else {
+				if (currentPath.startsWith('/admin')) {
+					window.location.pathname = '/admin/login';
+				}
+			}
+		});
+
+		return signInWithEmailAndPassword(this.auth, email, password);
+	}
+
+	getAuth(): User | null {
+		console.log('firebase auth:', this.auth.currentUser?.uid);
+		return this.auth.currentUser;
 	}
 
 	async getDoc<T>(id: string, collection: string): Promise<T> {
@@ -86,7 +120,7 @@ export class FirebaseService implements IProvider {
 	updateDoc<T>(id: string, data: T, collection: string): Promise<T> {
 		console.log(id, collection)
 		throw Error('not implemented yet')
-		
+
 	}
 
 	deleteDoc(id: string, collection: string): Promise<void> {

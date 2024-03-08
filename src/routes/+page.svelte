@@ -10,18 +10,26 @@
 	import Recipt from '../components/Recipt.svelte';
 	import Modal from '../components/modals/Modal.svelte';
 	import { onMount } from 'svelte';
+	import Keyboard from '../components/modals/Keyboard.svelte';
+	import { DBService } from '$lib/services/DB.service';
+	import { hideModal, showModal } from '$lib/services/Modal.service';
+	import Auth from '../components/modals/Auth.modal.svelte';
+	import { AuthService, _auth } from '$lib/services/Auth.service';
+	// import type { AuthModel } from 'pocketbase';
 
 	export let data;
-	onMount(() => {
-		// console.log('preloaded data is:', data);
-		// const setText = (e: KeyboardEvent) => {
-		// 	console.log('at window', e.key);
-		// };
-		// window.addEventListener('keydown', setText);
-		// return () => {
-		// 	window.removeEventListener('keydown', setText);
-		// };
-	});
+
+	$: if ($_auth) {
+		hideModal();
+	} else {
+		const auth = AuthService.getInstance().getLocalAuth();
+		// console.log({ auth });
+		if (auth) _auth.set(auth);
+		else showModal(Auth, { retain: true });
+	}
+	// onMount(() => {
+
+	// });
 </script>
 
 <div id="ticket">
@@ -32,8 +40,8 @@
 		<Products products={data.products} />
 	</div>
 	<div class="favorite-pane" style="--depth: 1;">
-		<Favorites products={data.products}/>
-		<Options complements={data.complements}/>
+		<Favorites products={data.products} />
+		<Options complements={data.complements} />
 	</div>
 	<div class="control-pane" style="--depth: 2;">
 		<Factura />
@@ -41,6 +49,7 @@
 	</div>
 </main>
 <Modal />
+<Keyboard />
 
 <style>
 	#ticket {

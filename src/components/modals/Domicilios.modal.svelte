@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { hideModal } from '$lib/services/Modal.service';
+	import { handleInput } from '$lib/services/Utils/Input.service';
 	import { onMount } from 'svelte';
 
 	let counter = 0;
@@ -10,11 +11,8 @@
 	let divRef: HTMLElement;
 
 	onMount(() => {
-		// console.log('maire viaaaa; divRef:', divRef)
 		const handleKeyDown = (ev: KeyboardEvent) => {
 			ev.stopPropagation();
-			
-			console.log('at dom.modal jeje', ev.key);
 		};
 		divRef.addEventListener('keydown', handleKeyDown);
 		return () => {
@@ -30,7 +28,7 @@
 	<h1>
 		counter: {counter}
 	</h1>
-	<input type="text">
+	<input type="text" use:handleInput/>
 	<button on:click|stopPropagation={() => increment()}> increment </button>
 </div>
 

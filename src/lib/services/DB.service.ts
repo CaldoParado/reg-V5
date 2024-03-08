@@ -1,38 +1,55 @@
 import type { IProvider } from '$lib/models/provider.model';
+import type { AuthModel } from 'pocketbase';
 import { PocketBaseProvider } from './providers/Pb.service';
 import { ElectronProvider } from './providers/electron.service';
-import { FirebaseService } from './providers/firebase.service';
+// import { FirebaseService } from './providers/firebase.service';
 
 export class DBService {
-	private static instance: DBService;
-	private static provider: IProvider;
+    private static instance: DBService;
+    private static provider: IProvider;
 
-	public static getInstance(): DBService {
-		if (!DBService.instance) {
-			DBService.instance = new DBService();
-		}
-		return DBService.instance;
-	}
+    public static getInstance(): DBService {
+        if (!DBService.instance) {
+            DBService.instance = new DBService();
+        }
+        return DBService.instance;
+    }
 
-	private constructor() {
-		// if (window.ELECTRON_API) {
-		if (window.ELECTRON_API) {
-			DBService.provider = new ElectronProvider();
-		} else if (import.meta.env.DEV) { 
-			// Revisa el API de electron (se conecta a Pocketbase)
-			DBService.provider = new PocketBaseProvider(); //Esto es a modo de prueba
-		} else if (navigator.onLine) {
-			// Revisa la conexión a internet (conecta a firebase)
-			DBService.provider = new FirebaseService();
-		} else {
-			// Dado que se ejecuta en navegador el fallback es IndexedDB
-			null;
-		}
-	}
+    private constructor() {
+        // if (window.ELECTRON_API) {
+        if (window.ELECTRON_API) {
+            DBService.provider = new ElectronProvider();
+            // } else if (import.meta.env.DEV) {
+        } else {
+            // Revisa el API de electron (se conecta a Pocketbase)
+            DBService.provider = new PocketBaseProvider(); //Esto es a modo de prueba
+        }
+        // else if (navigator.onLine) {
+        //     // Revisa la conexión a internet (conecta a firebase)
+        //     DBService.provider = new FirebaseService();
+        // }
+    }
 
-	private setOnlineInstance(): void {}
+    public authByMail(email: string, password: string): Promise<unknown> {
+        console.log('trying to auth')
+        return DBService.provider.authByMail(email, password);
+    }
 
-	/**
+    public logOut(): void {
+        DBService.provider.logOut();
+    }
+
+    public getAuth() {
+        return DBService.provider.getAuth();
+    }
+
+    public getAuthPB(): AuthModel {
+        return DBService.provider.getAuth() as AuthModel;
+    }
+
+    private setOnlineInstance(): void { }
+
+    /**
      * Retrieves a single document by its ID from a specified collection.
      * @param {string} id The ID of the document to retrieve.
      * @param {string} collection The collection name.

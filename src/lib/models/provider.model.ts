@@ -48,10 +48,14 @@ export interface IProvider {
      * @returns A promise that resolves when the document has been deleted.
      */
     deleteDoc(id: string, collection: string): Promise<void>;
+
+    authByMail(email: string, password: string): Promise<unknown>;
+    getAuth(): unknown;
+    logOut(): void;
 }
 
 export interface IDBService<T> {
-	getById: () => Promise<T>;
-	get: () => Promise<T[]>;
-	getFilter: (params: { [ke: string]: string }) => Promise<T[]>;
+    getById: () => Promise<T>;
+    get: () => Promise<T[]>;
+    getFilter: (params: { [ke: string]: string }) => Promise<T[]>;
 }

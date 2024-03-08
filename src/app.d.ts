@@ -37,4 +37,47 @@ declare global {
     }
 }
 
-export {};
+declare module 'svelte-keyboard' {
+    import { SvelteComponentTyped } from 'svelte';
+
+    interface KeyboardProps {
+        layout?: 'qwerty' | 'azerty';
+        preset?: 'standard' | 'crossword' | 'wordle';
+        custom?: Array<{ row: number, value: string, display?: string, page?: number }>;
+        keyClass?: Record<string, string>;
+        noSwap?: string[];
+        // Aquí puedes añadir las propiedades CSS customizables si lo deseas
+    }
+
+    interface KeyboardEvents {
+        keydown: CustomEvent<{ key: string }>;
+    }
+
+    class Keyboard extends SvelteComponentTyped<KeyboardProps, KeyboardEvents> { }
+
+    export default Keyboard;
+}
+
+export { };
+
+declare module 'toastify-js' {
+    interface ToastifyOptions {
+        text?: string;
+        duration?: number;
+        gravity?: "bottom" | "top";
+        position: "right" | 'center' | "left",
+        stopOnFocus: false,
+        style: {
+            [key: string]: unknown;
+        },
+        onClick: () => void
+    }
+
+    interface Toastify {
+        showToast(): void;
+    }
+
+    function Toastify(options: ToastifyOptions): Toastify;
+
+    export default Toastify;
+}

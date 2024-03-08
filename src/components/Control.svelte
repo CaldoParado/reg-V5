@@ -28,11 +28,10 @@
 		class="pay-button"
 		on:click={() => {
 			payBill();
-			resetBill();
 		}}
 	>
 		PAGAR
-		<img src="images/cocinerito.svg" alt="" height="75" width="75" />
+		<img src="images/cocinerito.svg" alt="" style="max-height: 50px; aspect-ratio: 1;"/>
 		<!-- <svg width="16" height="16">
 			<use xlink:href="assetsiconos.svg#icono1"></use>
 		  </svg> -->
@@ -89,8 +88,9 @@
 		width: 100%;
 		display: flex;
 		flex-direction: row;
+		gap: 15px;
 		align-items: center;
-		justify-content: center;
+		justify-content: center;	
 		aspect-ratio: 7/2;
 		/* height: 100%; */
 		border-radius: var(--boder-radius, 8px);

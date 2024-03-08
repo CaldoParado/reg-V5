@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Product } from '$lib/models/bill.model';
-	
+
 	// import { fullPrice } from '$lib/models/bill.model';
 	import _bill from '$lib/services/Bill.service';
 
@@ -16,14 +16,16 @@
 	// $: console.log(doubled);
 	// const prods = $_bill;
 
-	
-
+	$: _val = $_bill.reduce((ac, p) => ac + p.fullPrice(), 0);
 </script>
 
 <div class="container">
-	<div class="header">Controles superiores</div>
+	<div class="header">
+		<div>left</div>
+		<span>${_val}</span>
+		<div>right</div>
+	</div>
 	<div class="prods">
-
 		{#each $_bill as prod (prod)}
 			<button id={`${prod}`} class="prod">
 				<!-- {`${prod.name} - ${prod.fullPrice()} #${prod.quantity}`} -->
@@ -36,7 +38,7 @@
 		<button class="bill-control" />
 		<button class="bill-control" />
 		<button class="bill-control" />
-		<button class="bill-control" on:click={() => _bill.set([])} />
+		<button class="bill-control" on:click={() => _bill.set([])} >&#10672;</button>
 	</div>
 </div>
 
@@ -79,5 +81,9 @@
 	.bill-control {
 		width: 15%;
 		aspect-ratio: 1;
+	}
+	.header{
+		display: flex;
+		justify-content: space-around;
 	}
 </style>

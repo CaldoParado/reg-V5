@@ -9,7 +9,8 @@
 	}
 
 	function filteredEmployees(): Employee[]{
-		return getEmployees().filter(e => !filterRole || e.roles.includes(filterRole));
+		return [];
+		// return getEmployees().filter(e => !filterRole || e.roles.includes(filterRole));
 	}
 </script>
 

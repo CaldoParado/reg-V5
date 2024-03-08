@@ -20,7 +20,7 @@ export function showModal(
 	component: ConstructorOfATypedSvelteComponent | null,
 	props: ModalProps = {}
 ): void {
-	modalStore.set({ component, props });
+	modalStore.set({ component, props: props??{} });
 }
 
 /**

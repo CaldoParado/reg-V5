@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { keyboardStore } from '$lib/services/Keyboard.service';
 	import { hideModal, modalStore } from '$lib/services/Modal.service';
 	import { afterUpdate, onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
@@ -10,34 +11,44 @@
 
 	$: {
 		component = $modalStore.component;
-		props = $modalStore.props.data!;
+		props = $modalStore.props!;
 	}
 
-	$: {
-		console.log($modalStore.props.data)
-	}
+	// $: {
+	// 	console.log($modalStore.props.data)
+	// }
 
 	let modal: HTMLElement;
+
+	// export let activeKeyboard = false;
 
 	/**
 	 * Cierra el modal si se hace click en el overlay y no es un modal permanente.
 	 * @param {MouseEvent} e - El evento del click
 	 */
 	function handleClose(e: MouseEvent) {
-		if (!!props?.retain) return;
+		if (props && props.retain) return;
 		e.target === modal && hideModal();
+	}
+	let active = false;
+	$: {
+		active = $keyboardStore.component !== null;
 	}
 </script>
 
 {#if component}
 	<button bind:this={modal} class="modal-overlay" on:click={handleClose}>
-		<div class="modal-content" transition:scale>
+		<div class="modal-content" class:active transition:scale>
 			<svelte:component this={component} {...props} />
 		</div>
 	</button>
 {/if}
 
 <style>
+	.modal-content.active {
+		border: 1px solid crimson;
+		transform: translateY(-25%);
+	}
 	.modal-overlay::before {
 		content: '';
 		z-index: -1;
@@ -68,5 +79,7 @@
 		overflow: auto;
 		position: relative;
 		box-shadow: 12px 12px 38px #949494aa, -12px -12px 38px #a4a4a4aa;
+		transition: all 0.5s;
+
 	}
 </style>

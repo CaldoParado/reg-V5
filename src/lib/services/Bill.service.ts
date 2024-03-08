@@ -2,9 +2,7 @@ import { Product, type Complement, type ProductComplement, Category } from '$lib
 import { get, writable, type Writable } from 'svelte/store';
 import { DBService } from './DB.service';
 import { Snowflake } from "@theinternetfolks/snowflake";
-
-
-// import { DBService } from './DB.service';
+import { showError, showSuccess } from './Utils/Notification.service';
 
 /**
  * Almacena una lista de productos para una factura.
@@ -13,8 +11,6 @@ import { Snowflake } from "@theinternetfolks/snowflake";
 export const _bill: Writable<Product[]> = writable([]);
 export const product_complements: Writable<ProductComplement[]> = writable([]);
 
-// _bill.subscribe((b) => console.log('the new bill is', b));
-
 function flatBill(bill: Product[]) {
 	return bill.map((p: Product) => { return { id: p.id, qty: p.quantity, comps: p.complements.map(c => { return { id: c.id } }) } })
 }
@@ -22,13 +18,24 @@ function flatBill(bill: Product[]) {
 export function payBill() {
 	const uid = Snowflake.generate();
 	const bill = get(_bill);
-	console.log('bill at payBill', JSON.stringify(flatBill(bill)), uid);
+	if (!bill.length) {
+		showError('¡No hay productos!')
+		return;
+	}
 	DBService.getInstance()
 		.createDoc({
 			value: get(_bill).reduce((ac, cu) => ac + cu.fullPrice(), 0),
 			prods: JSON.stringify(flatBill(bill)),
 			uuid: uid,
-		}, 'bill');
+		}, 'bill')
+		//Error/success handling
+		.then(() => {
+			resetBill();
+			showSuccess(`¡Factura agregada!`);
+		})
+		.catch(err => {
+			showError(err)
+		});
 }
 
 export function addComplements(comp: Complement) {
@@ -47,7 +54,6 @@ export function addComplements(comp: Complement) {
 }
 
 export function addProduct(product: Product) {
-	console.log('adding', product)
 	let bll = get(_bill);
 	const indx = bll.findIndex((p) => p.compareProduct(product));
 	if (indx > -1) {
